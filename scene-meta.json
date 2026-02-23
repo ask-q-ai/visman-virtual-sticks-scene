@@ -1,0 +1,16 @@
+{
+  "id": "virtual-sticks-scene",
+  "name": "Virtual Sticks Scene",
+  "description": "Exported from embedded Flutter VisMan demo scene \"virtual-sticks-scene\".",
+  "tags": [
+    "scene",
+    "sticks",
+    "virtual"
+  ],
+  "source": "flutter-embedded-demo",
+  "generatedAt": "2026-02-23T08:11:45.557246Z",
+  "sceneFile": "visman.json",
+  "objectCount": 14,
+  "hasPhysics": false,
+  "has3D": true
+}
