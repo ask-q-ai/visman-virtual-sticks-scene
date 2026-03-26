@@ -1,0 +1,424 @@
+---
+initial_vm_state:
+  handOverlay:
+    enabled: true
+    centerX: 0.0
+    centerY: 1.2
+    centerZ: -1.4
+    spanX: 2.0
+    spanY: 1.6
+    spanZ: 1.4
+    leftOffsetX: -0.25
+    leftOffsetY: 0.0
+    leftOffsetZ: 0.0
+    rightOffsetX: 0.25
+    rightOffsetY: 0.0
+    rightOffsetZ: 0.0
+    rotGainX: 0.7
+    rotGainY: 1.0
+    rotGainZ: 0.6
+    poseFallback: open
+background:
+  color: "#0B1020"
+atmosphere:
+  preset: night
+  fogColor: "#0B1020"
+  fogNear: 20
+  fogFar: 120
+  exposure: 0.9
+camera:
+  position:
+    x: 0
+    y: 1.4
+    z: 4.4
+  lookAt:
+    x: 0
+    y: 1.2
+    z: -1.2
+  fov: 56
+  enableControls: false
+lights:
+- type: ambient
+  color: "#DDE7FF"
+  intensity: 0.5
+- type: directional
+  color: "#FFFFFF"
+  intensity: 0.95
+  position:
+    x: 5
+    y: 8
+    z: 6
+canvasLayer:
+- id: skeleton
+  context: canvas
+  type: tracked-stickman
+  position:
+    x: 140
+    y: 70
+  size:
+    width: 520
+    height: 460
+  properties:
+    data: "{{ @hub['render.body']?.data }}"
+  style:
+    strokeStyle: "#FFFFFF"
+    lineWidth: 2
+threeJsLayer:
+- id: hand-left-open
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.left.joints.wrist.x
+      ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.leftOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.left.joints.wrist.y
+      ?? @hub.render.body.joints.left_wrist.y ?? (1 - (@hub.tracker.hands.left.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.leftOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.left.joints.wrist.z
+      ?? @hub.render.body.joints.left_wrist.z ?? @hub.tracker.hands.left.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.leftOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.left.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.left.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.left.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/left_open.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.left.joints.wrist.x
+    ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'open' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-left-fist
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.left.joints.wrist.x
+      ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.leftOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.left.joints.wrist.y
+      ?? @hub.render.body.joints.left_wrist.y ?? (1 - (@hub.tracker.hands.left.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.leftOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.left.joints.wrist.z
+      ?? @hub.render.body.joints.left_wrist.z ?? @hub.tracker.hands.left.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.leftOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.left.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.left.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.left.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/left_fist.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.left.joints.wrist.x
+    ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'fist' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-left-point
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.left.joints.wrist.x
+      ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.leftOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.left.joints.wrist.y
+      ?? @hub.render.body.joints.left_wrist.y ?? (1 - (@hub.tracker.hands.left.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.leftOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.left.joints.wrist.z
+      ?? @hub.render.body.joints.left_wrist.z ?? @hub.tracker.hands.left.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.leftOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.left.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.left.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.left.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/left_point.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.left.joints.wrist.x
+    ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'point' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-left-pinch
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.left.joints.wrist.x
+      ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.leftOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.left.joints.wrist.y
+      ?? @hub.render.body.joints.left_wrist.y ?? (1 - (@hub.tracker.hands.left.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.leftOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.left.joints.wrist.z
+      ?? @hub.render.body.joints.left_wrist.z ?? @hub.tracker.hands.left.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.leftOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.left.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.left.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.left.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/left_pinch.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.left.joints.wrist.x
+    ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+    ?? 0.5) > -1.5) && ((@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_index' || (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_middle' || (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_ring' || (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_pinky') }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-left-peace
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.left.joints.wrist.x
+      ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.leftOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.left.joints.wrist.y
+      ?? @hub.render.body.joints.left_wrist.y ?? (1 - (@hub.tracker.hands.left.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.leftOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.left.joints.wrist.z
+      ?? @hub.render.body.joints.left_wrist.z ?? @hub.tracker.hands.left.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.leftOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.left.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.left.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.left.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/left_peace.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.left.joints.wrist.x
+    ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'peace' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-left-thumbs_up
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.left.joints.wrist.x
+      ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.leftOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.left.joints.wrist.y
+      ?? @hub.render.body.joints.left_wrist.y ?? (1 - (@hub.tracker.hands.left.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.leftOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.left.joints.wrist.z
+      ?? @hub.render.body.joints.left_wrist.z ?? @hub.tracker.hands.left.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.leftOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.left.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.left.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.left.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/left_thumbs_up.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.left.joints.wrist.x
+    ?? @hub.render.body.joints.left_wrist.x ?? @hub.tracker.hands.left.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.left.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'thumbs_up' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-right-open
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.right.joints.wrist.x
+      ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.rightOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.right.joints.wrist.y
+      ?? @hub.render.body.joints.right_wrist.y ?? (1 - (@hub.tracker.hands.right.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.rightOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.right.joints.wrist.z
+      ?? @hub.render.body.joints.right_wrist.z ?? @hub.tracker.hands.right.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.rightOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.right.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.right.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.right.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/right_open.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.right.joints.wrist.x
+    ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'open' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-right-fist
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.right.joints.wrist.x
+      ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.rightOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.right.joints.wrist.y
+      ?? @hub.render.body.joints.right_wrist.y ?? (1 - (@hub.tracker.hands.right.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.rightOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.right.joints.wrist.z
+      ?? @hub.render.body.joints.right_wrist.z ?? @hub.tracker.hands.right.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.rightOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.right.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.right.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.right.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/right_fist.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.right.joints.wrist.x
+    ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'fist' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-right-point
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.right.joints.wrist.x
+      ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.rightOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.right.joints.wrist.y
+      ?? @hub.render.body.joints.right_wrist.y ?? (1 - (@hub.tracker.hands.right.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.rightOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.right.joints.wrist.z
+      ?? @hub.render.body.joints.right_wrist.z ?? @hub.tracker.hands.right.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.rightOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.right.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.right.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.right.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/right_point.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.right.joints.wrist.x
+    ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'point' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-right-pinch
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.right.joints.wrist.x
+      ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.rightOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.right.joints.wrist.y
+      ?? @hub.render.body.joints.right_wrist.y ?? (1 - (@hub.tracker.hands.right.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.rightOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.right.joints.wrist.z
+      ?? @hub.render.body.joints.right_wrist.z ?? @hub.tracker.hands.right.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.rightOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.right.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.right.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.right.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/right_pinch.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.right.joints.wrist.x
+    ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+    ?? 0.5) > -1.5) && ((@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_index' || (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_middle' || (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_ring' || (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'pinch_pinky') }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-right-peace
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.right.joints.wrist.x
+      ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.rightOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.right.joints.wrist.y
+      ?? @hub.render.body.joints.right_wrist.y ?? (1 - (@hub.tracker.hands.right.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.rightOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.right.joints.wrist.z
+      ?? @hub.render.body.joints.right_wrist.z ?? @hub.tracker.hands.right.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.rightOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.right.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.right.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.right.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/right_peace.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.right.joints.wrist.x
+    ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'peace' }}"
+  castShadow: true
+  receiveShadow: true
+- id: hand-right-thumbs_up
+  context: threejs
+  type: gltf
+  position:
+    x: "{{ @vm.handOverlay.centerX + (((@hub.render.avatar.hands.right.joints.wrist.x
+      ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+      ?? 0.5) - 0.5) * @vm.handOverlay.spanX) + @vm.handOverlay.rightOffsetX }}"
+    y: "{{ @vm.handOverlay.centerY + (((@hub.render.avatar.hands.right.joints.wrist.y
+      ?? @hub.render.body.joints.right_wrist.y ?? (1 - (@hub.tracker.hands.right.position.y
+      ?? 0.5))) - 0.5) * @vm.handOverlay.spanY) + @vm.handOverlay.rightOffsetY }}"
+    z: "{{ @vm.handOverlay.centerZ + ((@hub.render.avatar.hands.right.joints.wrist.z
+      ?? @hub.render.body.joints.right_wrist.z ?? @hub.tracker.hands.right.position.z
+      ?? 0.0) * @vm.handOverlay.spanZ) + @vm.handOverlay.rightOffsetZ }}"
+  rotation:
+    x: "{{ (@hub.tracker.gesture.right.palm_tilt_fb ?? 0) * @vm.handOverlay.rotGainX
+      }}"
+    y: "{{ (@hub.tracker.gesture.right.palm_normal_z ?? 0) * @vm.handOverlay.rotGainY
+      }}"
+    z: "{{ (@hub.tracker.gesture.right.palm_normal_x ?? 0) * @vm.handOverlay.rotGainZ
+      }}"
+  properties:
+    src: assets/visman/models/hands/glove/right_thumbs_up.glb
+  visible: "{{ @vm.handOverlay.enabled && ((@hub.render.avatar.hands.right.joints.wrist.x
+    ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+    ?? 0.5) > -1.5) && (@hub.tracker.gesture.right.pose ?? @vm.handOverlay.poseFallback
+    ?? 'open') == 'thumbs_up' }}"
+  castShadow: true
+  receiveShadow: true
+domLayer:
+- id: status
+  context: dom
+  type: div
+  position:
+    x: 24
+    y: 24
+  properties:
+    text: "{{ (((@hub.render.avatar.hands.left.joints.wrist.x ?? @hub.render.body.joints.left_wrist.x
+      ?? @hub.tracker.hands.left.position.x ?? 0.5) > -1.5) || ((@hub.render.avatar.hands.right.joints.wrist.x
+      ?? @hub.render.body.joints.right_wrist.x ?? @hub.tracker.hands.right.position.x
+      ?? 0.5) > -1.5)) ? 'Hand Mesh Overlay Active' : 'Waiting for hand tracking'
+      }}"
+  style:
+    color: "#FFFFFF"
+    fontSize: 16
